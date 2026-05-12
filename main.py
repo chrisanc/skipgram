@@ -1,4 +1,6 @@
 from embeddings import SkipGram
+from tokenizer import Tokenizer
 
 skipgram = SkipGram()
-print(skipgram.embeddings())
+tokenizer = Tokenizer()
+print(tokenizer.tf_idf())
