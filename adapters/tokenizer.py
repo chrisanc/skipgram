@@ -7,32 +7,17 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 class Tokenizer:
-    def __init__(self):
-        self.file = self.__read_file_content(
-            filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
-        )
-
-    def __read_file_content(self, filepath: str) -> str:
-        with open(filepath, "r") as f:
-            content = f.read().upper()
-        
-        return self.__remove_punctuation(content)
+    def remove_punctuation(self, value: str) -> str:
+        return "".join(re.findall(r"[\w\s]+", value))
     
-    def __remove_punctuation(self, value: str) -> list[str]:
-        return "".join(re.findall(r"[\w\s*]+", value))
-    
-    def get_tokens(self) -> np.ndarray:
-        stop_words = stopwords.words("english")
-        tokens = word_tokenize(self.file)
-        tokens = [value.upper() for value in tokens if value not in stop_words]
+    def get_tokens(self, file:str, language:str = "english") -> np.ndarray:
+        stop_words = stopwords.words(language)
+        tokens = np.array([value for value in file.split() if value.lower() not in stop_words and value != ""])
         tokens = pd.unique(tokens)
 
         return tokens
     
     def one_hot_encoding(self, tokens: np.ndarray) -> pd.DataFrame:
-        if tokens.size == 0:
-            tokens = self.get_tokens()
-
         zeros = np.zeros((len(tokens), len(tokens)))
         for i in range(len(tokens)):
             zeros[i][i] = 1
@@ -57,17 +42,13 @@ class Tokenizer:
         return results
     
 
-    def tf_idf(self, tokens: np.ndarray = None):
+    def tf_idf(self, file:str, tokens: np.ndarray = None):
         """
         Calculates the TF-IDF for each one of the tokens
         based on the corpus
-        """
-        if (tokens == None):
-            tokens = self.get_tokens()
-            
-        docs = self.file.split("\n\n")
+        """ 
+        docs = [value for value in file.splitlines() if value != ""]
         freq = dict()
-        tf_idf = pd.DataFrame(data=[], columns=tokens)
         
         # Fill the map with the amount of documents containing each token
         for token in tokens:
@@ -79,7 +60,8 @@ class Tokenizer:
             
             freq.update({token: total})
         
-        # Calculate the 
+        # Calculate the TF-IDF index for each document
+        scores = list()
         for doc in docs:
             row = list()
             for token in tokens:
@@ -87,6 +69,6 @@ class Tokenizer:
                 idf = np.log(len(docs) / freq.get(token, 0.01))
                 row.append(tf * idf)
             
-            tf_idf.loc[len(tf_idf)] = row
+            scores.append(row)
             
-        return tf_idf
+        return pd.DataFrame(data=scores, columns=tokens)

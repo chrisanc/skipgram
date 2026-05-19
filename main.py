@@ -1,6 +1,5 @@
-from embeddings import SkipGram
-from tokenizer import Tokenizer
+from gui import GUI
+from adapters.tokenizer import Tokenizer
+from adapters.embeddings import SkipGram
 
-skipgram = SkipGram()
-tokenizer = Tokenizer()
-print(tokenizer.tf_idf())
+GUI(Tokenizer(), SkipGram())
