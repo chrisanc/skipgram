@@ -42,12 +42,11 @@ class Tokenizer:
         return results
     
 
-    def tf_idf(self, file:str, tokens: np.ndarray = None):
+    def tf_idf(self, docs: list[str], tokens: np.ndarray = None):
         """
         Calculates the TF-IDF for each one of the tokens
         based on the corpus
         """ 
-        docs = [value for value in file.splitlines() if value != ""]
         freq = dict()
         
         # Fill the map with the amount of documents containing each token

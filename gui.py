@@ -16,19 +16,44 @@ class GUI:
         self.__setup()
     
     def __setup(self):
-        st.title("Minería de Texto")
+        st.title("Minería de Texto y Busqueda Semantica")
         st.subheader("TF-IDF y Skipgram")
         file = st.file_uploader("Ingresa el corpus", accept_multiple_files=False, type=["txt"])
-        
-        if file != None:
-            # Create the sidebar contents
-            st.sidebar.subheader("Zona de filtros")
+        if file == None:
+            return
+    
+        # Create the sidebar contents
+        # Add to a select box the two main sections
+        st.sidebar.subheader("Zona de filtros")
+        section = st.sidebar.selectbox("Selecciona la sección...", options=["Minería de Texto", "SkipGram"])
+    
+        if section == "Minería de Texto":
+            # Extract and normalize the file content
+            file:str = self.tokenizer.remove_punctuation(file.getvalue().decode("utf-8")).upper()
+            # Set up sidebar content
             selected_lang = st.sidebar.selectbox("Selecciona el idioma de tu corpus", options=langs.keys())
             sliding_window = st.sidebar.slider(
                 "Selecciona el tamaño de la ventana de contexto", min_value=1, max_value=20, value=2
             )
-            # Extract and normalize the file content
-            file:str = self.tokenizer.remove_punctuation(file.getvalue().decode("utf-8")).upper()
+            split_method = st.sidebar.selectbox(
+                "Como identificarás los documentos en tu corpus?",
+                options=["Por parrafos", "Por filas"]
+            )
+            if split_method == "Por filas":
+                # Calculate the amount of rows
+                raw_rows = [value.replace("\r", "").strip() for value in file.split("\n") if value.replace("\r", "").strip() != ""]
+                amount_rows = st.sidebar.slider(
+                    "Selecciona la cantidad de filas por documento",
+                    min_value=5, max_value=len(raw_rows),
+                    value=40
+                )
+
+                # Create the fixed-size rows
+                rows = ["\n".join(raw_rows[index-amount_rows:index]) for index in range(amount_rows, len(raw_rows) + amount_rows, amount_rows)]
+            else:
+                rows = [value for value in file.splitlines() if value != ""]
+            
+            # Execute the tokenizer methods
             tokens = self.tokenizer.get_tokens(file, language=langs[selected_lang])
             one_hot = self.tokenizer.one_hot_encoding(tokens)
             pairs = self.tokenizer.create_pairs(one_hot, tokens, slidingWindow=sliding_window)
@@ -50,10 +75,11 @@ class GUI:
             )
             
             # Obtain the TF-IDF index from the data
-            tf_idf = self.tokenizer.tf_idf(file, tokens)
+            tf_idf = self.tokenizer.tf_idf(rows, tokens)
             # Display the TF-IDF results
             self.__plot_tf_idf(tf_idf)
-            
+        else:
+            st.title("Skipgram y busqueda semantica")
             # Execute the skipgram algorithm. Each token has a embedding
             # embeds = self.skipgram.embeddings(tokens, one_hot, pairs, 0)
             
