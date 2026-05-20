@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import plotly.graph_objects as go
+from sklearn.decomposition import PCA
 import numpy as np
 from adapters.tokenizer import Tokenizer
 from adapters.embeddings import SkipGram
@@ -78,10 +80,44 @@ class GUI:
             tf_idf = self.tokenizer.tf_idf(rows, tokens)
             # Display the TF-IDF results
             self.__plot_tf_idf(tf_idf)
+            
+            if st.button("Entrenar SkipGram"):
+                self.skipgram.embeddings(tokens, one_hot, pairs, 0, epochs=100)
         else:
-            st.title("Skipgram y busqueda semantica")
+            # Get the trained embeddings
+            WIn, _ = np.load("/home/chris/Documents/github-projects/skipgram/objects/WIn.npy"), np.load("/home/chris/Documents/github-projects/skipgram/objects/WOut.npy")
+            # Reduct the dimensionality
+            pca_model = PCA(n_components=3)
+            embedding = pca_model.fit_transform(WIn)
+            
             # Execute the skipgram algorithm. Each token has a embedding
-            # embeds = self.skipgram.embeddings(tokens, one_hot, pairs, 0)
+            figure = go.Figure(
+                data=[
+                    go.Scatter3d(
+                        x=embedding[:, 0],
+                        y=embedding[:, 1],
+                        z=embedding[:, 2],
+                        mode="markers",
+                        marker=dict(
+                            size=5,
+                            color=embedding[:, 2],
+                            colorscale='Viridis',
+                            opacity=0.8
+                        ),
+                    )
+                ]
+            )
+            figure.update_layout(
+                title="Espacio vectorial semántico de los tokens",
+                scene=dict(
+                    xaxis_title="PC1",
+                    yaxis_title="PC2",
+                    zaxis_title="PC3"
+                )
+            )
+            st.plotly_chart(figure)
+            
+            # Semantic search by an input
             
             
     def __plot_tf_idf(self, tf_idf: pd.DataFrame):

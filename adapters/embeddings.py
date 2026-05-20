@@ -21,7 +21,10 @@ class SkipGram:
         Neural Network (SkipGram).
         """
         try:
-            return np.load("WIn.npy"), np.load("WOut.npy")
+            return (
+                np.load("/home/chris/Documents/github-projects/skipgram/objects/WIn.npy"),
+                np.load("/home/chris/Documents/github-projects/skipgram/objects/WOut.npy")
+            )
         except OSError:
             print("The file doesn't exists, generating...")
         
@@ -57,7 +60,7 @@ class SkipGram:
             print(f"Epoch {epoch+1}/{epochs}, Loss: {total_loss/len(tokens)}")
 
         # Save the matrices in binary NumPy files
-        np.save(file="WIn.npy", arr=input_weights)
-        np.save(file="Wout.npy", arr=input_weights)
+        np.save(file="/home/chris/Documents/github-projects/skipgram/objects/WIn.npy", arr=input_weights)
+        np.save(file="/home/chris/Documents/github-projects/skipgram/objects/WOut.npy", arr=input_weights)
         # Return the matrices
         return input_weights, output_weights
