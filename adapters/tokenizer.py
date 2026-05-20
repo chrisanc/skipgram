@@ -1,10 +1,7 @@
-import tkinter as tk
-from tkinter import filedialog
 import pandas as pd
 import numpy as np
 import re
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 
 class Tokenizer:
     def remove_punctuation(self, value: str) -> str:
@@ -42,7 +39,7 @@ class Tokenizer:
         return results
     
 
-    def tf_idf(self, docs: list[str], tokens: np.ndarray = None):
+    def tf_idf(self, docs: list[str], tokens: np.ndarray = None) -> pd.DataFrame:
         """
         Calculates the TF-IDF for each one of the tokens
         based on the corpus

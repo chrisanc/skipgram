@@ -33,9 +33,10 @@ class SkipGram:
         output_weights = self.__init_weights(embedding_size, len(tokens))
         
         target_words, context_words = zip(*pairs)
-        total_loss = 0
+        
         # Start the training loop by epochs
         for epoch in range(epochs + 1):
+            total_loss = 0
             # On each epoch, we must apply a whole process...
             for target_word, context_word in zip(target_words, context_words):
                 # Apply the forward pass
@@ -44,23 +45,23 @@ class SkipGram:
                 output_probs = self.__softmax(output_vector)
                 
                 # Calculate the gradient
-                error = output_probs
+                error = output_probs.copy()
                 error[context_word] -= 1
                 
                 # Backpropagation: Weights adjustment
-                input_grad = np.dot(error, input_weights)
+                input_grad = np.dot(output_weights, error)
                 output_grad = np.outer(input_vector, error)
                 # Update the weights
                 input_weights[target_word] -= learning_rate * input_grad
                 output_weights -= learning_rate * output_grad
                 
                 # Calculate the loss on this iteration
-                total_loss += -np.log(output_probs[target_word])
+                total_loss += -np.log(output_probs[context_word])
             
             print(f"Epoch {epoch+1}/{epochs}, Loss: {total_loss/len(tokens)}")
 
         # Save the matrices in binary NumPy files
         np.save(file="/home/chris/Documents/github-projects/skipgram/objects/WIn.npy", arr=input_weights)
-        np.save(file="/home/chris/Documents/github-projects/skipgram/objects/WOut.npy", arr=input_weights)
+        np.save(file="/home/chris/Documents/github-projects/skipgram/objects/WOut.npy", arr=output_weights)
         # Return the matrices
         return input_weights, output_weights

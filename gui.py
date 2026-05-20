@@ -1,10 +1,12 @@
 import streamlit as st
 import pandas as pd
+import re
 import plotly.graph_objects as go
 from sklearn.decomposition import PCA
 import numpy as np
 from adapters.tokenizer import Tokenizer
 from adapters.embeddings import SkipGram
+from corpus import Corpus
 
 langs = {
     "Inglés": "english",
@@ -12,9 +14,10 @@ langs = {
 }
 
 class GUI:
-    def __init__(self, tokenizer: Tokenizer, skipgram: SkipGram):
-        self.tokenizer = tokenizer
-        self.skipgram = skipgram
+    def __init__(self, corpus: Corpus, skipgram: SkipGram):
+        self.__corpus = corpus
+        self.__skipgram = skipgram
+        self.__remove_punctuation = lambda x: "".join(re.findall(r"[\w\s]+", x)).upper()
         self.__setup()
     
     def __setup(self):
@@ -31,7 +34,7 @@ class GUI:
     
         if section == "Minería de Texto":
             # Extract and normalize the file content
-            file:str = self.tokenizer.remove_punctuation(file.getvalue().decode("utf-8")).upper()
+            file:str = self.__remove_punctuation(file.getvalue().decode("utf-8"))
             # Set up sidebar content
             selected_lang = st.sidebar.selectbox("Selecciona el idioma de tu corpus", options=langs.keys())
             sliding_window = st.sidebar.slider(
@@ -56,33 +59,32 @@ class GUI:
                 rows = [value for value in file.splitlines() if value != ""]
             
             # Execute the tokenizer methods
-            tokens = self.tokenizer.get_tokens(file, language=langs[selected_lang])
-            one_hot = self.tokenizer.one_hot_encoding(tokens)
-            pairs = self.tokenizer.create_pairs(one_hot, tokens, slidingWindow=sliding_window)
+            self.__corpus.update_corpus(file, langs[selected_lang], sliding_window)
+            st.session_state.corpus = self.__corpus
 
             # Display all the vocabulary
             st.subheader("Vocabulario del corpus")
-            st.write(f"Total de palabras: {len(tokens)}")
-            st.dataframe(tokens)
+            st.write(f"Total de palabras: {len(self.__corpus.tokens)}")
+            st.dataframe(self.__corpus.tokens)
             
             # Display all the pairs
             st.subheader(f"Pares creados con la ventana de contexto en {sliding_window}")
-            st.write(f"Total de pares: {len(pairs)}")
+            st.write(f"Total de pares: {len(self.__corpus.pairs)}")
             st.dataframe(
                 pd.DataFrame(
-                    data=[[tokens[i], tokens[j]] for i, j in pairs],
+                    data=[[self.__corpus.tokens[i], self.__corpus.tokens[j]] for i, j in self.__corpus.pairs],
                     columns=["Palabra 1", "Palabra 2"]
                 ),
                 hide_index=True
             )
             
             # Obtain the TF-IDF index from the data
-            tf_idf = self.tokenizer.tf_idf(rows, tokens)
+            tf_idf = self.__corpus.tokenizer.tf_idf(rows, self.__corpus.tokens)
             # Display the TF-IDF results
             self.__plot_tf_idf(tf_idf)
             
             if st.button("Entrenar SkipGram"):
-                self.skipgram.embeddings(tokens, one_hot, pairs, 0, epochs=100)
+                self.__skipgram.embeddings(self.__corpus.tokens, self.__corpus.one_hot, self.__corpus.pairs, 0)
         else:
             # Get the trained embeddings
             WIn, _ = np.load("/home/chris/Documents/github-projects/skipgram/objects/WIn.npy"), np.load("/home/chris/Documents/github-projects/skipgram/objects/WOut.npy")
@@ -118,6 +120,18 @@ class GUI:
             st.plotly_chart(figure)
             
             # Semantic search by an input
+            st.subheader("Busqueda semantica por palabra")
+            search_word = st.text_input("Ingresa una palabra", value="")
+            # Verify it's just one word
+            if search_word == "":
+                return
+            search_word = search_word.strip()
+            if search_word.find(" ") > 0:
+                st.warning("Debe ser una sola palabra!...")
+                return
+            
+            # Execute the data search
+            st.write(st.session_state.corpus.tokens)
             
             
     def __plot_tf_idf(self, tf_idf: pd.DataFrame):
