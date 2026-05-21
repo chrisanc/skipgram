@@ -87,7 +87,7 @@ class GUI:
                 self.__skipgram.embeddings(self.__corpus.tokens, self.__corpus.one_hot, self.__corpus.pairs, 0)
         else:
             # Get the trained embeddings
-            WIn, _ = np.load("/home/chris/Documents/github-projects/skipgram/objects/WIn.npy"), np.load("/home/chris/Documents/github-projects/skipgram/objects/WOut.npy")
+            WIn, WOut = np.load("/home/chris/Documents/ProyectosGithub/skipgram/objects/WIn.npy"), np.load("/home/chris/Documents/ProyectosGithub/skipgram/objects/WOut.npy")
             # Reduct the dimensionality
             pca_model = PCA(n_components=3)
             embedding = pca_model.fit_transform(WIn)
@@ -106,6 +106,7 @@ class GUI:
                             colorscale='Viridis',
                             opacity=0.8
                         ),
+                        hovertext=st.session_state.corpus.tokens
                     )
                 ]
             )
@@ -131,7 +132,9 @@ class GUI:
                 return
             
             # Execute the data search
-            st.write(st.session_state.corpus.tokens)
+            i = self.__skipgram.semantic_lookup(st.session_state.corpus.one_hot.iloc[8, :], WIn, WOut)
+            print(st.session_state.corpus.tokens[8], st.session_state.corpus.tokens[i])
+            st.write(f"Palabra de continuación más probable: {st.session_state.corpus.tokens[i]}")
             
             
     def __plot_tf_idf(self, tf_idf: pd.DataFrame):

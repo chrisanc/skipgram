@@ -22,8 +22,8 @@ class SkipGram:
         """
         try:
             return (
-                np.load("/home/chris/Documents/github-projects/skipgram/objects/WIn.npy"),
-                np.load("/home/chris/Documents/github-projects/skipgram/objects/WOut.npy")
+                np.load("/home/chris/Documents/ProyectosGithub/skipgram/objects/WIn.npy"),
+                np.load("/home/chris/Documents/ProyectosGithub/skipgram/objects/WOut.npy")
             )
         except OSError:
             print("The file doesn't exists, generating...")
@@ -40,7 +40,7 @@ class SkipGram:
             # On each epoch, we must apply a whole process...
             for target_word, context_word in zip(target_words, context_words):
                 # Apply the forward pass
-                input_vector = input_weights[target_word]
+                input_vector = input_weights[target_word]       
                 output_vector = np.dot(input_vector, output_weights)
                 output_probs = self.__softmax(output_vector)
                 
@@ -58,10 +58,20 @@ class SkipGram:
                 # Calculate the loss on this iteration
                 total_loss += -np.log(output_probs[context_word])
             
-            print(f"Epoch {epoch+1}/{epochs}, Loss: {total_loss/len(tokens)}")
+            if epoch % (epochs / 10) == 0:
+                print(f"Epoch {epoch+1}/{epochs}, Loss: {total_loss/len(pairs)}")
 
         # Save the matrices in binary NumPy files
-        np.save(file="/home/chris/Documents/github-projects/skipgram/objects/WIn.npy", arr=input_weights)
-        np.save(file="/home/chris/Documents/github-projects/skipgram/objects/WOut.npy", arr=output_weights)
+        np.save(file="/home/chris/Documents/ProyectosGithub/skipgram/objects/WIn.npy", arr=input_weights)
+        np.save(file="/home/chris/Documents/ProyectosGithub/skipgram/objects/WOut.npy", arr=output_weights)
         # Return the matrices
         return input_weights, output_weights
+    
+
+    def semantic_lookup(self, word_array: np.ndarray, input_weights: np.ndarray, output_weights: np.ndarray):
+        """
+        Performs the semantic search based on the trained weights
+        """
+        probs = word_array @ input_weights
+        probs = self.__softmax(probs @ output_weights)
+        return probs.argmax()
