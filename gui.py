@@ -120,6 +120,15 @@ class GUI:
             )
             st.plotly_chart(figure)
             
+            # Execute the data search
+            st.subheader("Busqueda semantica por token de corpus")
+            selected_token = st.selectbox("Selecciona un token", options=st.session_state.corpus.tokens)
+            token_index = np.where(st.session_state.corpus.tokens == selected_token)[0][0]
+            i = self.__skipgram.semantic_lookup(st.session_state.corpus.one_hot.iloc[token_index, :], WIn, WOut)
+
+            st.write(f"Palabra de continuación más probable: {st.session_state.corpus.tokens[i]}")
+            
+            """
             # Semantic search by an input
             st.subheader("Busqueda semantica por palabra")
             search_word = st.text_input("Ingresa una palabra", value="")
@@ -130,11 +139,7 @@ class GUI:
             if search_word.find(" ") > 0:
                 st.warning("Debe ser una sola palabra!...")
                 return
-            
-            # Execute the data search
-            i = self.__skipgram.semantic_lookup(st.session_state.corpus.one_hot.iloc[8, :], WIn, WOut)
-            print(st.session_state.corpus.tokens[8], st.session_state.corpus.tokens[i])
-            st.write(f"Palabra de continuación más probable: {st.session_state.corpus.tokens[i]}")
+            """
             
             
     def __plot_tf_idf(self, tf_idf: pd.DataFrame):
