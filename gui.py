@@ -87,7 +87,7 @@ class GUI:
                 self.__skipgram.embeddings(self.__corpus.tokens, self.__corpus.one_hot, self.__corpus.pairs, 0)
         else:
             # Get the trained embeddings
-            WIn, WOut = np.load("/home/chris/Documents/ProyectosGithub/skipgram/objects/WIn.npy"), np.load("/home/chris/Documents/ProyectosGithub/skipgram/objects/WOut.npy")
+            WIn, WOut = np.load("/home/chris/Documents/github-projects/skipgram/objects/WIn.npy"), np.load("/home/chris/Documents/github-projects/skipgram/objects/WOut.npy")
             # Reduct the dimensionality
             pca_model = PCA(n_components=3)
             embedding = pca_model.fit_transform(WIn)

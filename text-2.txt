@@ -1,0 +1,81 @@
+La inteligencia artificial (IA) es una rama de la informática que busca desarrollar sistemas capaces
+de realizar tareas que, en condiciones normales, requerirían inteligencia humana. Estas tareas incluyen
+el razonamiento lógico, la comprensión del lenguaje natural, el reconocimiento de patrones visuales, la
+toma de decisiones y el aprendizaje a partir de la experiencia. Desde sus primeras formulaciones teóricas
+a mediados del siglo XX, la inteligencia artificial ha evolucionado de manera vertiginosa, transformando
+industrias enteras y redefiniendo la relación entre los seres humanos y las máquinas.
+El término "inteligencia artificial" fue acuñado por John McCarthy en 1956, durante la célebre conferencia
+de Dartmouth, considerada el punto de partida formal de esta disciplina. En aquella reunión, investigadores
+pioneros como Marvin Minsky, Claude Shannon y Nathaniel Rochester plantearon la hipótesis de que todos los
+aspectos de la inteligencia podrían, en principio, ser descritos con tal precisión que sería posible construir
+una máquina capaz de simularlos.
+Durante las décadas siguientes, la IA atravesó períodos de gran entusiasmo y otros de estancamiento, conocidos
+como "inviernos de la IA", en los que la falta de capacidad computacional y de datos limitó el avance de los
+algoritmos. Sin embargo, con la llegada del siglo XXI, la explosión de los datos digitales, el aumento exponencial
+del poder de procesamiento y el desarrollo de nuevas arquitecturas algorítmicas dieron lugar a una nueva era de
+la inteligencia artificial. Hoy en día, los sistemas de IA son capaces de superar a los humanos en tareas específicas
+como el ajedrez, el diagnóstico médico por imágenes y la traducción automática de idiomas.
+
+El aprendizaje automático, conocido en inglés como machine learning, es una subdisciplina de la inteligencia artificial
+que permite a los sistemas informáticos aprender de los datos sin ser programados explícitamente para cada tarea. En lugar
+de seguir instrucciones codificadas de forma rígida, los algoritmos de aprendizaje automático identifican patrones estadísticos
+en conjuntos de datos y construyen modelos predictivos que mejoran con la experiencia.
+Existen tres paradigmas fundamentales dentro del aprendizaje automático. El primero es el aprendizaje supervisado, en el que el
+algoritmo se entrena con datos etiquetados, es decir, ejemplos en los que la respuesta correcta ya es conocida. El segundo es el
+aprendizaje no supervisado, donde el sistema identifica estructuras ocultas en datos sin etiquetar, como agrupaciones o asociaciones.
+El tercero es el aprendizaje por refuerzo, en el que un agente aprende a tomar decisiones óptimas mediante la interacción continua con
+un entorno, recibiendo recompensas o penalizaciones según el resultado de sus acciones.
+Dentro del aprendizaje supervisado destacan algoritmos como la regresión lineal, la regresión logística, los árboles de decisión, los
+bosques aleatorios y las máquinas de vectores de soporte. Para el aprendizaje no supervisado, los métodos más utilizados incluyen el
+clustering con K-means, el análisis de componentes principales (PCA) y los modelos de mezcla gaussiana. En el aprendizaje por refuerzo,
+algoritmos como Q-learning y los métodos de gradiente de política han demostrado resultados sobresalientes en entornos complejos como videojuegos y robótica.
+
+Las redes neuronales artificiales son modelos computacionales inspirados en la estructura y el funcionamiento del cerebro humano.
+Están formadas por capas de unidades de procesamiento llamadas neuronas artificiales o perceptrones, que se conectan entre sí mediante
+pesos sinápticos. Cuando una red neuronal recibe una entrada, la información fluye a través de sus capas hasta producir una salida, ajustando
+progresivamente los pesos mediante un proceso de optimización conocido como retropropagación del error.
+El aprendizaje profundo, o deep learning, es una extensión del aprendizaje automático que utiliza redes neuronales con múltiples capas ocultas,
+lo que permite extraer representaciones jerárquicas y abstractas de los datos. Esta capacidad resulta especialmente útil en tareas como el procesamiento
+de imágenes, el reconocimiento de voz, la generación de texto y la traducción automática. Las arquitecturas más relevantes del aprendizaje profundo incluyen
+las redes neuronales convolucionales (CNN), ampliamente utilizadas en visión por computadora; las redes neuronales recurrentes (RNN) y sus variantes con memoria
+a largo plazo (LSTM), empleadas en el procesamiento de secuencias temporales; y los transformers, que han revolucionado el procesamiento del lenguaje natural.
+El auge del aprendizaje profundo ha sido impulsado por tres factores clave: la disponibilidad masiva de datos de entrenamiento, el desarrollo de unidades de
+procesamiento gráfico (GPU) de alta capacidad y el perfeccionamiento de técnicas como la normalización por lotes, el abandono aleatorio (dropout) y la inicialización
+adecuada de pesos. Gracias a estos avances, modelos como GPT, BERT y ResNet han alcanzado un desempeño sin precedentes en sus respectivos dominios.
+
+El procesamiento del lenguaje natural (PLN) es la rama de la inteligencia artificial dedicada a la interacción entre computadoras y el lenguaje humano. Su objetivo es
+permitir que las máquinas comprendan, interpreten y generen texto o habla de manera significativa. El PLN combina técnicas de lingüística computacional, estadística y
+aprendizaje profundo para abordar problemas que van desde el análisis de sentimientos y la extracción de información hasta la generación de respuestas coherentes en sistemas de diálogo.
+Entre las tareas fundamentales del PLN se encuentran la tokenización, que consiste en dividir el texto en unidades mínimas de análisis; el etiquetado morfosintáctico, que asigna categorías
+gramaticales a cada token; el análisis de dependencias, que identifica las relaciones estructurales entre palabras; y el reconocimiento de entidades nombradas, que detecta referencias a personas,
+organizaciones, lugares y fechas dentro de un texto.
+Más allá de estas tareas básicas, el PLN moderno aborda desafíos de mayor complejidad, como la resolución de correferencias, la inferencia textual, la generación automática de resúmenes y la respuesta
+a preguntas. Los modelos de lenguaje de gran escala, conocidos como LLM (Large Language Models), han transformado profundamente este campo al demostrar capacidades emergentes para razonar, generar código,
+traducir entre idiomas y mantener conversaciones coherentes en múltiples turnos. Estos modelos se entrenan con enormes corpus textuales mediante técnicas de autoatención, lo que les permite capturar dependencias
+de largo alcance en el lenguaje.
+
+La visión por computadora es una disciplina que dota a los sistemas de inteligencia artificial de la capacidad de interpretar y comprender información visual del mundo real, como imágenes digitales y
+secuencias de video. A través del análisis de píxeles, texturas, formas y patrones espaciales, los algoritmos de visión artificial pueden identificar objetos, estimar profundidad, rastrear movimientos y
+reconstruir escenas tridimensionales.
+Las aplicaciones de la visión por computadora son extraordinariamente diversas. En el sector salud, los sistemas de diagnóstico basados en imágenes médicas emplean redes neuronales convolucionales para detectar tumores,
+lesiones y anomalías en radiografías, tomografías y resonancias magnéticas con una precisión comparable o superior a la de especialistas humanos. En la industria automotriz, los vehículos autónomos utilizan cámaras, sensores
+LiDAR y algoritmos de detección de objetos para navegar en entornos complejos y tomar decisiones en tiempo real. En el comercio minorista, los sistemas de caja sin cajero identifican productos y registran transacciones sin intervención humana.
+Más allá de la visión, la inteligencia artificial se aplica en campos como la robótica cognitiva, la predicción financiera, la personalización de contenidos en plataformas digitales, la detección de fraudes bancarios y la optimización de cadenas
+de suministro. En cada uno de estos dominios, los modelos de IA analizan grandes volúmenes de datos estructurados y no estructurados para generar predicciones, clasificaciones o recomendaciones que mejoran la eficiencia de los procesos y la experiencia del usuario final.
+
+El desarrollo acelerado de la inteligencia artificial plantea interrogantes éticas de gran calado que trascienden el ámbito técnico y afectan a la sociedad en su conjunto. Entre los principales riesgos identificados por investigadores,
+organismos reguladores y organizaciones civiles se encuentran el sesgo algorítmico, la opacidad de los modelos, la vigilancia masiva, el desplazamiento laboral y la concentración del poder tecnológico en unas pocas corporaciones transnacionales.
+El sesgo algorítmico se produce cuando los modelos de inteligencia artificial replican o amplifican prejuicios presentes en los datos de entrenamiento. Esto puede traducirse en decisiones discriminatorias en ámbitos sensibles como la contratación
+laboral, la concesión de créditos, el sistema judicial o la atención médica. La falta de diversidad en los conjuntos de datos y en los equipos de desarrollo contribuye a perpetuar estas desigualdades estructurales.
+La opacidad de los algoritmos, también denominada problema de la "caja negra", dificulta la interpretación y la auditoría de las decisiones automatizadas. Frente a este desafío, el campo de la inteligencia artificial explicable (XAI) busca desarrollar
+métodos que permitan comprender y justificar el comportamiento de los modelos. Iniciativas regulatorias como el Reglamento de Inteligencia Artificial de la Unión Europea establecen obligaciones de transparencia y trazabilidad para los sistemas de alto riesgo. La gobernanza
+responsable de la IA requiere marcos normativos robustos, participación ciudadana y una cultura de rendición de cuentas que garantice que el desarrollo tecnológico esté al servicio del bienestar humano y no en su detrimento.
+
+La inteligencia artificial general (AGI, por sus siglas en inglés) es el término utilizado para describir un tipo hipotético de sistema de IA capaz de comprender, aprender y aplicar conocimiento en cualquier dominio intelectual con la misma flexibilidad y profundidad que un ser humano.
+A diferencia de los sistemas de IA estrecha actuales, que destacan en tareas específicas pero carecen de capacidad de transferencia entre dominios, la AGI podría razonar de manera abstracta, formular hipótesis originales y adaptarse a situaciones completamente nuevas sin necesidad de reentrenamiento.
+El debate sobre el horizonte temporal en el que podría emerger la AGI divide profundamente a la comunidad científica. Algunos investigadores, como los vinculados a laboratorios como OpenAI, DeepMind y Anthropic, sostienen que la AGI podría ser alcanzable en las próximas décadas, mientras que otros consideran
+que las barreras fundamentales, tanto computacionales como epistemológicas, hacen de este objetivo algo mucho más lejano o incluso inalcanzable con los paradigmas actuales.
+Más allá de la AGI, algunos teóricos plantean el concepto de superinteligencia, es decir, un sistema que superaría las capacidades cognitivas humanas en todos los aspectos relevantes. Esta posibilidad ha motivado el surgimiento de la investigación en alineación de IA, cuyo propósito es garantizar
+que los sistemas de inteligencia artificial avanzados actúen de acuerdo con los valores y objetivos humanos. La seguridad en IA, la robustez ante distribuciones de datos fuera de la distribución de entrenamiento y la interpretabilidad de los modelos son áreas de investigación fundamentales para asegurar que el
+progreso tecnológico sea beneficioso, controlable y sostenible a largo plazo.
+

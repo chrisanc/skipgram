@@ -22,8 +22,8 @@ class SkipGram:
         """
         try:
             return (
-                np.load("/home/chris/Documents/ProyectosGithub/skipgram/objects/WIn.npy"),
-                np.load("/home/chris/Documents/ProyectosGithub/skipgram/objects/WOut.npy")
+                np.load("/home/chris/Documents/github-projects/skipgram/objects/WIn.npy"),
+                np.load("/home/chris/Documents/github-projects/skipgram/objects/WOut.npy")
             )
         except OSError:
             print("The file doesn't exists, generating...")
@@ -62,8 +62,8 @@ class SkipGram:
                 print(f"Epoch {epoch+1}/{epochs}, Loss: {total_loss/len(pairs)}")
 
         # Save the matrices in binary NumPy files
-        np.save(file="/home/chris/Documents/ProyectosGithub/skipgram/objects/WIn.npy", arr=input_weights)
-        np.save(file="/home/chris/Documents/ProyectosGithub/skipgram/objects/WOut.npy", arr=output_weights)
+        np.save(file="/home/chris/Documents/github-projects/skipgram/objects/WIn.npy", arr=input_weights)
+        np.save(file="/home/chris/Documents/github-projects/skipgram/objects/WOut.npy", arr=output_weights)
         # Return the matrices
         return input_weights, output_weights
     
