@@ -66,6 +66,12 @@ class GUI:
             st.subheader("Vocabulario del corpus")
             st.write(f"Total de palabras: {len(self.__corpus.tokens)}")
             st.dataframe(self.__corpus.tokens)
+
+            # Display the one hot
+            st.subheader("One-hot encoding de los datos")
+            # Set the tokens as the index
+            self.__corpus.one_hot.set_index(self.__corpus.tokens, inplace=True)
+            st.dataframe(self.__corpus.one_hot)
             
             # Display all the pairs
             st.subheader(f"Pares creados con la ventana de contexto en {sliding_window}")
@@ -124,7 +130,11 @@ class GUI:
             st.subheader("Busqueda semantica por token de corpus")
             selected_token = st.selectbox("Selecciona un token", options=st.session_state.corpus.tokens)
             token_index = np.where(st.session_state.corpus.tokens == selected_token)[0][0]
-            i = self.__skipgram.semantic_lookup(st.session_state.corpus.one_hot.iloc[token_index, :], WIn, WOut)
+            try:
+                i = self.__skipgram.semantic_lookup(st.session_state.corpus.one_hot.iloc[token_index, :], WIn, WOut)
+            except Exception:
+                st.error("Ocurrió un error")
+                return
 
             st.write(f"Palabra de continuación más probable: {st.session_state.corpus.tokens[i]}")
             
@@ -147,8 +157,7 @@ class GUI:
         st.subheader("RESULTADOS DEL TF-IDF")
         st.write(f"Total de documentos: {len(tf_idf)}")
         # Display the data as a dataframe
-        df = tf_idf.apply(self.__extract_values, axis=1)
-        st.dataframe(data=df, hide_index=True)
+        st.dataframe(data=tf_idf, hide_index=False)
         
         
     def __extract_values(self, row: pd.Series) -> pd.Series:
