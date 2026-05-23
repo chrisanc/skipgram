@@ -12,6 +12,15 @@ class SkipGram:
     def __softmax(self, Z: np.ndarray):
         return np.exp(Z) / np.sum(np.exp(Z))
     
+    
+    def __cosine_similarity(self, embedding: pd.Series, other: pd.Series) -> float:
+        return (embedding @ other) / (self.__norm_magnitude(embedding) * self.__norm_magnitude(other))
+    
+    
+    def __norm_magnitude(self, embedding: pd.Series) -> float:
+        return np.sqrt(np.sum(embedding ** 2))
+    
+    
     def embeddings(
         self, tokens: np.ndarray, one_hot: pd.DataFrame, pairs: list[tuple[int, int]],
         word_index: int, embedding_size: int = 300, learning_rate: float = 0.01, epochs:int = 10000
@@ -68,10 +77,24 @@ class SkipGram:
         return input_weights, output_weights
     
 
-    def semantic_lookup(self, word_array: np.ndarray, input_weights: np.ndarray, output_weights: np.ndarray):
+    def semantic_lookup(self, token_index: int, context_window: int, input_weights: np.ndarray, tokens: np.ndarray):
         """
         Performs the semantic search based on the trained weights
         """
-        probs = word_array @ input_weights
-        probs = self.__softmax(probs @ output_weights)
-        return probs.argmax()
+        # Obtain the embedding of the word
+        word_embedding = input_weights[token_index]
+        # Create a new array with the data
+        data = list()
+        # Obtain the similarity per row
+        for i, row in enumerate(input_weights):
+            if i == token_index:
+                continue
+            
+            data.append([tokens[i], self.__cosine_similarity(word_embedding, row)])
+        # Create a dataframe with the given data ordered
+        similarity = pd.DataFrame(columns=["Token", "Similarity"], data=data, index=None)
+        # Order in descending order
+        similarity.sort_values(by="Similarity", ascending=False, inplace=True)
+        
+        # Based on the context window, we retrieve the N closest elements
+        return similarity[max(0, token_index - context_window):min(len(tokens) - 1, token_index + context_window)]
