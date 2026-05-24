@@ -44,7 +44,7 @@ class SkipGram:
         target_words, context_words = zip(*pairs)
         
         # Start the training loop by epochs
-        for epoch in range(epochs + 1):
+        for epoch in range(epochs):
             total_loss = 0
             # On each epoch, we must apply a whole process...
             for target_word, context_word in zip(target_words, context_words):

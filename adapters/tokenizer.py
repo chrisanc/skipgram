@@ -22,19 +22,15 @@ class Tokenizer:
 
         return df
     
-    def create_pairs(self, one_hot: pd.DataFrame, tokens: np.ndarray, slidingWindow: int = 2) -> list[tuple[int, int]]:
+    def create_pairs(self, tokens: np.ndarray, slidingWindow: int = 2) -> list[tuple[int, int]]:
         results: list[tuple[int, int]] = list()
-        sumIds = 0
+        
         for i in range(0, len(tokens)):
-            subdf = one_hot.iloc[:, i-sumIds:i + slidingWindow + 1]
-            for j in range(len(subdf.columns)):
-                if tokens[i] == subdf.columns[j]:
+            subdf_columns = tokens[max(i - slidingWindow, 0):i + slidingWindow + 1]
+            for j in range(len(subdf_columns)):
+                if tokens[i] == subdf_columns[j]:
                     continue
-                results.append((i, i - sumIds + j))
-
-            # Add one to the sumIds if necessary
-            if sumIds < slidingWindow:
-                sumIds+=1
+                results.append((i, max(i - slidingWindow, 0) + j))
 
         return results
     

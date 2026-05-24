@@ -59,8 +59,8 @@ class GUI:
         # Execute the tokenizer methods
         tokens = self.__tokenizer.get_tokens(file, langs[selected_lang])
         one_hot = self.__tokenizer.one_hot_encoding(tokens)
-        pairs = self.__tokenizer.create_pairs(one_hot, tokens, context_window)
-        
+        pairs = self.__tokenizer.create_pairs(tokens, context_window)
+
         st.title("Minería de Texto")
 
         # Display all the vocabulary
