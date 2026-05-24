@@ -6,16 +6,15 @@ from sklearn.decomposition import PCA
 import numpy as np
 from adapters.tokenizer import Tokenizer
 from adapters.embeddings import SkipGram
-from corpus import Corpus
 
 langs = {
-    "Inglés": "english",
-    "Español": "spanish"
+    "Español": "spanish",
+    "Inglés": "english"
 }
 
 class GUI:
-    def __init__(self, corpus: Corpus, skipgram: SkipGram):
-        self.__corpus = corpus
+    def __init__(self, tokenizer: Tokenizer, skipgram: SkipGram):
+        self.__tokenizer = tokenizer
         self.__skipgram = skipgram
         self.__remove_punctuation = lambda x: "".join(re.findall(r"[\w\s]+", x)).upper()
         self.__setup()
@@ -58,34 +57,36 @@ class GUI:
             rows = [value for value in file.splitlines() if value != ""]
         
         # Execute the tokenizer methods
-        self.__corpus.update_corpus(file, langs[selected_lang], context_window)
+        tokens = self.__tokenizer.get_tokens(file, langs[selected_lang])
+        one_hot = self.__tokenizer.one_hot_encoding(tokens)
+        pairs = self.__tokenizer.create_pairs(one_hot, tokens, context_window)
         
         st.title("Minería de Texto")
 
         # Display all the vocabulary
         st.subheader("Vocabulario del corpus")
-        st.write(f"Total de palabras: {len(self.__corpus.tokens)}")
-        st.dataframe(self.__corpus.tokens)
+        st.write(f"Total de palabras: {len(tokens)}")
+        st.dataframe(tokens)
 
         # Display the one hot
         st.subheader("One-hot encoding de los datos")
         # Set the tokens as the index
-        self.__corpus.one_hot.set_index(self.__corpus.tokens, inplace=True)
-        st.dataframe(self.__corpus.one_hot)
+        one_hot.set_index(tokens, inplace=True)
+        st.dataframe(one_hot)
         
         # Display all the pairs
         st.subheader(f"Pares creados con la ventana de contexto en {context_window}")
-        st.write(f"Total de pares: {len(self.__corpus.pairs)}")
+        st.write(f"Total de pares: {len(pairs)}")
         st.dataframe(
             pd.DataFrame(
-                data=[[self.__corpus.tokens[i], self.__corpus.tokens[j]] for i, j in self.__corpus.pairs],
+                data=[[tokens[i], tokens[j]] for i, j in pairs],
                 columns=["Palabra 1", "Palabra 2"]
             ),
             hide_index=True
         )
         
         # Obtain the TF-IDF index from the data
-        tf_idf = self.__corpus.tokenizer.tf_idf(rows, self.__corpus.tokens)
+        tf_idf = self.__tokenizer.tf_idf(rows, tokens)
         # Display the TF-IDF results
         self.__plot_tf_idf(tf_idf)
             
@@ -96,7 +97,7 @@ class GUI:
         except Exception:
             st.warning("No se encuentran los pesos de entrenamiento...")
             if st.button("Entrenar SkipGram"):
-                self.__skipgram.embeddings(self.__corpus.tokens, self.__corpus.one_hot, self.__corpus.pairs, 0)
+                self.__skipgram.embeddings(tokens, one_hot, pairs, 0)
             return
         # Reduct the dimensionality
         pca_model = PCA(n_components=3)
@@ -116,7 +117,7 @@ class GUI:
                         colorscale='Viridis',
                         opacity=0.8
                     ),
-                    hovertext=st.session_state.corpus.tokens
+                    hovertext=tokens
                 )
             ]
         )
@@ -132,10 +133,10 @@ class GUI:
         
         # Execute the data search
         st.subheader("Busqueda semantica por token de corpus")
-        selected_token = st.selectbox("Selecciona un token", options=self.__corpus.tokens)
-        token_index = np.where(self.__corpus.tokens == selected_token)[0][0]
+        selected_token = st.selectbox("Selecciona un token", options=tokens)
+        token_index = np.where(tokens == selected_token)[0][0]
         cosine_similarity = self.__skipgram.semantic_lookup(
-            token_index, context_window, WIn, self.__corpus.tokens
+            token_index, context_window, WIn, tokens
         )
         
         st.dataframe(cosine_similarity, hide_index=True)
