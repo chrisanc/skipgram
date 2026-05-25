@@ -35,7 +35,7 @@ class Tokenizer:
         return results
     
 
-    def tf_idf(self, docs: list[str], tokens: np.ndarray = None) -> pd.DataFrame:
+    def tf_idf(self, docs: list[str], tokens: np.ndarray = None, lang: str = "spanish") -> pd.DataFrame:
         """
         Calculates the TF-IDF for each one of the tokens
         based on the corpus
@@ -56,9 +56,10 @@ class Tokenizer:
         scores = list()
         for doc in docs:
             row = list()
+            doc_tokens = self.get_tokens(doc, language=lang)
             for token in tokens:
-                tf = doc.count(token)
-                idf = np.log(len(docs) / freq.get(token, 0.01))
+                tf = doc.count(token) / len(doc_tokens)
+                idf = np.log(len(docs) / freq.get(token, 0.00001))
                 row.append(tf * idf)
             
             scores.append(row)
